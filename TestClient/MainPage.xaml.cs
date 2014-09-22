@@ -17,8 +17,8 @@ namespace TestClient
 {
     public partial class MainPage : PhoneApplicationPage
     {
-        private const string NOTIFICATION_HUB_NAME = "testnhub";
-        private const string CONNECTION_STRING = "Endpoint=sb://testnhub.servicebus.windows.net/;SharedAccessKeyName=DefaultListenSharedAccessSignature;SharedAccessKey=BF2kmcz1lhJRCw3DcxD0oTe0QxjvucO0mKhe3UOCz6A=";
+        private const string NOTIFICATION_HUB_NAME = "YOUR_NOTIFICATION_HUBS_NAME";
+        private const string CONNECTION_STRING = "YOUR_NOTIFICATION_HUBS_CONNECTION_STRING";
 
         public MainPage()
         {
@@ -65,8 +65,8 @@ namespace TestClient
             tags.Add("tester");
 
             NotificationHub hub = new NotificationHub(NOTIFICATION_HUB_NAME, CONNECTION_STRING);
-            await hub.RegisterNativeAsync(channel.Uri);
-            //await hub.RegisterNativeAsync(channel.Uri, tags);
+            //await hub.RegisterNativeAsync(channel.Uri);
+            await hub.RegisterNativeAsync(channel.Uri, tags);
             ShowPushChannel();
         }
 

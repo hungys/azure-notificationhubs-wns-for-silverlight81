@@ -31,7 +31,14 @@ namespace Microsoft.WindowsAzure.Messaging
 
         public async Task<String> executeRequest(String resource, String content, String contentType, HttpMethod method, Dictionary<string, string> extraHeaders)
         {
-            return await executeRequest(resource, content, contentType, method, null, extraHeaders);
+            try
+            {
+                return await executeRequest(resource, content, contentType, method, null, extraHeaders);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public async Task<String> executeRequest(String resource, String content, String contentType, HttpMethod method, String targetHeaderName, Dictionary<string, string> extraHeaders)
@@ -64,7 +71,14 @@ namespace Microsoft.WindowsAzure.Messaging
                 }
             }
 
-            return await executeRequest(request, targetHeaderName);
+            try
+            {
+                return await executeRequest(request, targetHeaderName);
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
         }
 
         private String AddApiVersionToUrl(String url)
@@ -116,6 +130,10 @@ namespace Microsoft.WindowsAzure.Messaging
                     }
                 }
 
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
             finally
             {

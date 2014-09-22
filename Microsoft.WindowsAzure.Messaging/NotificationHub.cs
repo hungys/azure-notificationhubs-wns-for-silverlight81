@@ -52,7 +52,14 @@ namespace Microsoft.WindowsAzure.Messaging
         /// <returns></returns>
         public async Task<Registration> RegisterAsync(Registration registration)
         {
-            return await registerInternal(registration);
+            try
+            {
+                return await registerInternal(registration);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         /// <summary>
@@ -70,7 +77,14 @@ namespace Microsoft.WindowsAzure.Messaging
 
             Registration registration = new Registration(channelUri, tags);
 
-            return await registerInternal(registration);
+            try
+            {
+                return await registerInternal(registration);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         /// <summary>
@@ -87,7 +101,14 @@ namespace Microsoft.WindowsAzure.Messaging
 
             Registration registration = new Registration(channelUri);
 
-            return await registerInternal(registration);
+            try
+            {
+                return await registerInternal(registration);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         /// <summary>
@@ -111,7 +132,14 @@ namespace Microsoft.WindowsAzure.Messaging
         {
             if (!String.IsNullOrWhiteSpace(registration.RegistrationId))
             {
-                await deleteRegistrationInternal(registration.RegistrationId);
+                try
+                {
+                    await deleteRegistrationInternal(registration.RegistrationId);
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
             }
         }
 
@@ -123,7 +151,14 @@ namespace Microsoft.WindowsAzure.Messaging
         /// <returns></returns>
         public async Task UnregisterNativeAsync()
         {
-            await unregisterInternal();
+            try
+            {
+                await unregisterInternal();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         /// <summary>
@@ -143,7 +178,14 @@ namespace Microsoft.WindowsAzure.Messaging
             String registrationId = retrieveRegistrationId();
             if (String.IsNullOrWhiteSpace(registrationId))
             {
-                registrationId = await createRegistrationId();
+                try
+                {
+                    registrationId = await createRegistrationId();
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
             }
 
             registration.RegistrationId = registrationId;
@@ -152,14 +194,26 @@ namespace Microsoft.WindowsAzure.Messaging
             {
                 return await upsertRegistrationInternal(registration);
             }
-            catch (RegistrationGoneException e)
+            catch (RegistrationGoneException ex)
             {
                 // if we get an RegistrationGoneException (410) from service, we will recreate registration id and will try to do upsert one more time.
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
 
             registrationId = await createRegistrationId();
             registration.RegistrationId = registrationId;
-            return await upsertRegistrationInternal(registration);
+
+            try
+            {
+                return await upsertRegistrationInternal(registration);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         private async Task unregisterInternal()
@@ -168,7 +222,14 @@ namespace Microsoft.WindowsAzure.Messaging
 
             if (!String.IsNullOrWhiteSpace(registrationId))
             {
-                await deleteRegistrationInternal(registrationId);
+                try
+                {
+                    await deleteRegistrationInternal(registrationId);
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
             }
         }
 
@@ -183,6 +244,10 @@ namespace Microsoft.WindowsAzure.Messaging
             {
                 await conn.executeRequest(resource, null, XML_CONTENT_TYPE, HttpMethod.Delete, headers);
             }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
             finally
             {
                 removeRegistrationId();
@@ -196,14 +261,21 @@ namespace Microsoft.WindowsAzure.Messaging
             String resource = Path + "/Registrations/" + registration.RegistrationId;
             String content = registration.ToXml();
 
-            String response = await conn.executeRequest(resource, content, XML_CONTENT_TYPE, HttpMethod.Put, null);
+            try
+            {
+                String response = await conn.executeRequest(resource, content, XML_CONTENT_TYPE, HttpMethod.Put, null);
 
-            Registration result = new Registration();
-            result.loadXml(response, Path);
+                Registration result = new Registration();
+                result.loadXml(response, Path);
 
-            storeRegistrationId(result.Name, result.RegistrationId, registration.ChannelUri);
+                storeRegistrationId(result.Name, result.RegistrationId, registration.ChannelUri);
 
-            return result;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         private void storeRegistrationId(String registrationName, String registrationId, String channelUri)
@@ -235,9 +307,9 @@ namespace Microsoft.WindowsAzure.Messaging
             {
                 ConnectionStringParser.Parse(connectionString);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw new ArgumentException("connectionString", e);
+                throw new ArgumentException("connectionString", ex);
             }
 
             Connection = connectionString;
@@ -245,16 +317,23 @@ namespace Microsoft.WindowsAzure.Messaging
 
         private async Task<String> createRegistrationId()
         {
-            Connection conn = new Connection(Connection);
+            try
+            {
+                Connection conn = new Connection(Connection);
 
-            String resource = Path + "/registrationIDs/";
-            String response = await conn.executeRequest(resource, null, XML_CONTENT_TYPE, HttpMethod.Post, NEW_REGISTRATION_LOCATION_HEADER, null);
+                String resource = Path + "/registrationIDs/";
+                String response = await conn.executeRequest(resource, null, XML_CONTENT_TYPE, HttpMethod.Post, NEW_REGISTRATION_LOCATION_HEADER, null);
 
-            Uri regIdUri = new Uri(response);
-            String[] pathFragments = regIdUri.AbsolutePath.Split('/');
-            String result = pathFragments[pathFragments.Length - 1];
+                Uri regIdUri = new Uri(response);
+                String[] pathFragments = regIdUri.AbsolutePath.Split('/');
+                String result = pathFragments[pathFragments.Length - 1];
 
-            return result;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         private string retrieveRegistrationId()

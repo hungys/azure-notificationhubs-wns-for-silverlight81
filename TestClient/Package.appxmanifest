@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest" xmlns:m3="http://schemas.microsoft.com/appx/2014/manifest" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest">
-  <Identity Name="ac19f604-6b4e-48ab-a885-5690b25ddcfd" Publisher="CN=Yu-Hsin" Version="1.0.0.0" />
+  <!--<Identity Name="ac19f604-6b4e-48ab-a885-5690b25ddcfd" Publisher="CN=Yu-Hsin" Version="1.0.0.0" />-->
+  <Identity Name="39750Yu-HsinHung.UrbanAirshipTest" Publisher="CN=B28748E1-0E9A-45B0-9013-C05032588853" Version="1.0.0.0" />
   <mp:PhoneIdentity PhoneProductId="c1c3ab50-34ca-455e-a0ad-11ce457d27dd" PhonePublisherId="964eee1f-b535-42b7-b013-b4f4dacea029" />
   <Properties>
     <DisplayName>TestClient</DisplayName>
