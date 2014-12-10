@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.IO.IsolatedStorage;
 using System.Linq;
-using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Web.Http;
 
 namespace Microsoft.WindowsAzure.Messaging
 {
@@ -196,6 +196,7 @@ namespace Microsoft.WindowsAzure.Messaging
             }
             catch (RegistrationGoneException ex)
             {
+                throw ex;
                 // if we get an RegistrationGoneException (410) from service, we will recreate registration id and will try to do upsert one more time.
             }
             catch (Exception ex)

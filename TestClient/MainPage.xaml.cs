@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
@@ -34,10 +33,10 @@ namespace TestClient
         private void ShowPushChannel()
         {
             IsolatedStorageSettings isolatedStorageSettings = IsolatedStorageSettings.ApplicationSettings;
-            if (isolatedStorageSettings.Contains("testnhub-Registrations"))
+            if (isolatedStorageSettings.Contains("whoscallwp-Registrations"))
             {
-                txtRegistrationID.Text = (string)isolatedStorageSettings["testnhub-Registrations"];
-                txtChannelUri.Text = (string)isolatedStorageSettings["testnhub-Channel"];
+                txtRegistrationID.Text = (string)isolatedStorageSettings["whoscallwp-Registrations"];
+                txtChannelUri.Text = (string)isolatedStorageSettings["whoscallwp-Channel"];
             }
             else
             {

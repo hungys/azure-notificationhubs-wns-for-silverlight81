@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Web.Http;
 
 namespace Microsoft.WindowsAzure.Messaging
 {
@@ -60,7 +60,7 @@ namespace Microsoft.WindowsAzure.Messaging
             HttpRequestMessage request = new HttpRequestMessage(method, new Uri(url));
             if (!String.IsNullOrEmpty(content))
             {
-                request.Content = new StringContent(content, Encoding.UTF8, contentType);
+                request.Content = new HttpStringContent(content, Windows.Storage.Streams.UnicodeEncoding.Utf8, contentType);
             }
 
             if (extraHeaders != null)
@@ -113,20 +113,20 @@ namespace Microsoft.WindowsAzure.Messaging
             {
                 client = new HttpClient();
 
-                HttpResponseMessage response = await client.SendAsync(request);
+                HttpResponseMessage response = await client.SendRequestAsync(request);
 
                 status = (int)response.StatusCode;
                 content = await response.Content.ReadAsStringAsync();
 
                 if (targetHeaderName != null)
                 {
-                    if (!response.Headers.Contains(targetHeaderName))
+                    if (!response.Headers.ContainsKey(targetHeaderName))
                     {
                         noHeaderButExpected = true;
                     }
                     else
                     {
-                        headerValue = response.Headers.GetValues(targetHeaderName).FirstOrDefault();
+                        headerValue = response.Headers[targetHeaderName];
                     }
                 }
 
@@ -172,7 +172,7 @@ namespace Microsoft.WindowsAzure.Messaging
         private void addAuthorizationHeader(HttpRequestMessage request)
         {
             String token = generateAuthToken(request.RequestUri.ToString());
-            request.Headers.Add(AUTHORIZATION_HEADER, token);
+            request.Headers.TryAppendWithoutValidation(AUTHORIZATION_HEADER, token);
         }
 
         private String generateAuthToken(String url)
